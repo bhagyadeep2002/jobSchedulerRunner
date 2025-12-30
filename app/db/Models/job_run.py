@@ -3,6 +3,7 @@ from enum import Enum
 from sqlalchemy import DateTime, String
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm.properties import ForeignKey
 
 from app.db.base import Base
 
@@ -17,7 +18,7 @@ class JobRunStatus(Enum):
 class JobRun(Base):
     __tablename__ = "job_runs"
     id: Mapped[int] = mapped_column(primary_key=True)
-    job_id: Mapped[int] = mapped_column(foreign_key="jobs.id")
+    job_id: Mapped[int] = mapped_column(ForeignKey("jobs.id"))
     status: Mapped[JobRunStatus] = mapped_column(
         SAEnum(JobRunStatus), default=JobRunStatus.PENDING
     )

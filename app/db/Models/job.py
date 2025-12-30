@@ -4,6 +4,7 @@ from enum import Enum
 from sqlalchemy import DateTime, String
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm.properties import ForeignKey
 
 from app.db.base import Base
 
@@ -23,13 +24,16 @@ class ScheduleType(Enum):
 class Job(Base):
     __tablename__ = "jobs"
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(foreign_key="users.id")
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     name: Mapped[str] = mapped_column(String)
     payload: Mapped[str] = mapped_column(String)
     schedule_type: Mapped[ScheduleType] = mapped_column(
-        SAEnum(ScheduleType, name="schedule_type_enum"), nullable=False
+        SAEnum(ScheduleType, name="schedule_type_enum"),
+        nullable=False,
+        default=ScheduleType.CRON,
     )
     run_at: Mapped[datetime] = mapped_column(DateTime)
+    cron_expression: Mapped[str] = mapped_column(String)
     status: Mapped[JobStatus] = mapped_column(
         SAEnum(JobStatus, name="job_status_enum"), nullable=False
     )
