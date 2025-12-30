@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DATABASE_URL = (
-    f"postgresql+psycopg://{DB_USERNAME}:{DB_PASSWORD}:@localhost:5432/jobrunner"
+    f"postgresql+psycopg://{DB_USERNAME}:{DB_PASSWORD}@localhost:5432/jobrunner"
 )
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
