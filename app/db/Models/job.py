@@ -35,6 +35,8 @@ class Job(Base):
     run_at: Mapped[datetime] = mapped_column(DateTime)
     cron_expression: Mapped[str] = mapped_column(String)
     status: Mapped[JobStatus] = mapped_column(
-        SAEnum(JobStatus, name="job_status_enum"), nullable=False
+        SAEnum(JobStatus, name="job_status_enum"),
+        nullable=False,
+        default=JobStatus.ENABLED,
     )
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
