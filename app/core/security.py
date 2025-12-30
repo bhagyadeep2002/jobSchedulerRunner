@@ -4,6 +4,7 @@ from pathlib import Path
 
 import jwt
 from dotenv import load_dotenv
+from fastapi import HTTPException
 from passlib.context import CryptContext
 
 # env_path = Path(__file__).resolve().parents[2] / ".env"
@@ -25,3 +26,13 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def create_access_token(user_id: int):
     payload = {"sub": str(user_id), "exp": datetime.utcnow() + timedelta(minutes=30)}
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+
+
+def decode_token(token: str) -> dict:
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="invalid token")
