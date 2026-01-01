@@ -5,8 +5,10 @@ A job scheduler and runner similar to AWS Lambda + Eventbridge where user can lo
 ## Todo
 
 - [x] Implement Auth
-- [ ] Implement Jobs DB
-- [ ] Implement Jobs Endpoints
+- [x] Implement Jobs DB
+- [x] Implement Jobs Endpoints
+- [ ] Get code in payload and store it in python file with unique name and store that name in db
 - [ ] Implement actual Job execution
+- [ ] Move next run schedule from DB to separate file
 
 ...... and much more!
