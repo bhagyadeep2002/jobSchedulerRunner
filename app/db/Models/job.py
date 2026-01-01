@@ -1,7 +1,8 @@
 from datetime import datetime
 from enum import Enum
 
-from sqlalchemy import DateTime, String
+from croniter import croniter
+from sqlalchemy import DateTime, String, event
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.orm.properties import ForeignKey
@@ -40,3 +41,11 @@ class Job(Base):
         default=JobStatus.ENABLED,
     )
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+
+
+@event.listens_for(Job, "before_insert")
+def before_insert(mapper, connection, target):
+    if target.run_at is None and target.cron_expression:
+        base = datetime.now()
+        itr = croniter(target.cron_expression, base)
+        target.run_at = itr.get_next(datetime)
